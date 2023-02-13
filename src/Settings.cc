@@ -409,6 +409,7 @@ namespace ORB_SLAM3 {
 
         fps_ = readParameter<int>(fSettings,"Camera.fps",found);
         bRGB_ = (bool) readParameter<int>(fSettings,"Camera.RGB",found);
+        bColor_ = (bool) readParameter<int>(fSettings,"isColor",found, false);
     }
 
     void Settings::readIMU(cv::FileStorage &fSettings) {

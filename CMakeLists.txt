@@ -388,3 +388,15 @@ if(realsense2_FOUND)
             Examples_old/Stereo-Inertial/stereo_inertial_realsense_D435i.cc)
     target_link_libraries(stereo_inertial_realsense_D435i_old ${PROJECT_NAME})
 endif()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular)
+add_executable(mono_mi
+        Examples/Monocular/mono_mi.cc)
+target_link_libraries(mono_mi ${PROJECT_NAME})
+
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular-Inertial)
+add_executable(mono_inertial_mi
+        Examples/Monocular-Inertial/mono_inertial_mi.cc)
+target_link_libraries(mono_inertial_mi ${PROJECT_NAME})
+

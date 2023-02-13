@@ -584,6 +584,8 @@ void Tracking::newParameterLoader(Settings *settings) {
     mMinFrames = 0;
     mMaxFrames = settings->fps();
     mbRGB = settings->rgb();
+    mIsColor = settings->isColor();
+    cout << "iscolor=" << mIsColor << endl;
 
     //ORB parameters
     int nFeatures = settings->nFeatures();
@@ -1566,6 +1568,7 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
 Sophus::SE3f Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp, string filename)
 {
     mImGray = im;
+    im.copyTo(mImRGB);
     if(mImGray.channels()==3)
     {
         if(mbRGB)

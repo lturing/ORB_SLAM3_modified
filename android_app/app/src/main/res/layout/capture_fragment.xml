@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    tools:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    tools:context="se.lth.math.videoimucapture.CameraCaptureFragment">
+
+    <se.lth.math.videoimucapture.AspectFrameLayout
+        android:id="@+id/cameraPreview_afl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <se.lth.math.videoimucapture.SampleGLView
+            android:id="@+id/cameraPreview_surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+    </se.lth.math.videoimucapture.AspectFrameLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/cameraParams_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="[?]"
+        android:textAppearance="@style/TextAppearance.MyApp.Overlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/captureResult_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="focal length : exposure time"
+        android:textAppearance="@style/TextAppearance.MyApp.Overlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraParams_text" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/OIS_warning_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/warning_icon_desc"
+        android:src="@drawable/ic_warning_24"
+        app:backgroundTint="@null"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@null" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/toggleRecording_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="50dp"
+        android:contentDescription="@string/record_description"
+        android:src="@drawable/ic_start_record"
+        app:backgroundTint="@color/recordButtonBkg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@null" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

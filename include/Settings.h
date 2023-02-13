@@ -81,6 +81,7 @@ namespace ORB_SLAM3 {
         cv::Size newImSize() {return newImSize_;}
         float fps() {return fps_;}
         bool rgb() {return bRGB_;}
+        bool isColor() {return bColor_;}
         bool needToResize() {return bNeedToResize1_;}
         bool needToRectify() {return bNeedToRectify_;}
 
@@ -169,6 +170,7 @@ namespace ORB_SLAM3 {
         cv::Size originalImSize_, newImSize_;
         float fps_;
         bool bRGB_;
+        bool bColor_;
 
         bool bNeedToUndistort_;
         bool bNeedToRectify_;

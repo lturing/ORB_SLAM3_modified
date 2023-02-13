@@ -23,6 +23,7 @@ Examples/Monocular/mono_kitti
 Examples/Monocular/mono_tum
 Examples/Monocular/mono_tum_vi
 Examples/Monocular/mono_realsense_t265
+Examples/Monocular/mono_mi 
 
 Examples/Stereo/stereo_euroc
 Examples/Stereo/stereo_kitti
@@ -35,6 +36,8 @@ Examples/Monocular-Inertial/mono_inertial_tum_vi
 Examples/Monocular-Inertial/mono_inertial_realsense_t265
 Examples/Monocular-Inertial/mono_inertial_realsense_D435i
 Examples/Monocular-Inertial/mono_inertial_realsense_D435i_2
+Examples/Monocular-Inertial/mono_inertial_mi
+
 
 Examples/Stereo-Inertial/stereo_inertial_euroc
 Examples/Stereo-Inertial/stereo_inertial_tum_vi
