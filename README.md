@@ -232,6 +232,9 @@ e^\delta = \begin{pmatrix}
 V \approx Matrix3d::Identity()
 ```
 
+```math
+R \approx Matrix3d::Identity() + Omega
+```
 
 3. 代码[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L349)中的EdgeMono、EdgeMonoOnlyPose、EdgeStereo、EdgeStereoOnlyPose的jacobi不对，证明如下：  
 ```math
