@@ -1,4 +1,4 @@
-# 环境
+## 环境
 
 * ubuntu20
 * 小米9se
@@ -7,7 +7,7 @@
 
 <div align=center><img src="./images/流程.png" width="60%"/></div>
 
-# 安卓编译(通过安卓手机获取图像、加速度、角速度等信息)
+## 安卓编译(通过安卓手机获取图像、加速度、角速度等信息)
 
 ```
 # 安装jdk，并添加环境变量
@@ -33,11 +33,11 @@ cd android_app
 # 编译好的apk在目录 app/build/outputs/apk/debug
 ```
 
-# imu噪声参数评估
+## imu噪声参数评估
 
 安装本仓库提供的apk，将手机放在桌面上，保持静止状态，打开apk，录制3个小时以上的数据。录制好的数据在目录/Android/data/se.lth.math.videoimucapture/files下
 
-## 处理数据
+### 处理数据
 
 ```
 cd /data/ORB_SLAM3_modified
@@ -58,7 +58,7 @@ python script/data2statistics.py $data_dir/video_meta.pb3
 python script/data2kalibr.py $data_dir --subsample 10 --save_image false
 ```
 
-## 参数评估
+### 参数评估
 
 ```
 # 安装kalibr
@@ -104,7 +104,7 @@ rosrun allan_variance_ros analysis.py --data /data/path/to/imu_data/allan_varian
 
 根据我们的经验，对于成本最低的传感器，可能需要将噪声模型参数增加10倍或更多[here](https://github.com/ethz-asl/kalibr/wiki/IMU-Noise-Model)
 
-# 相机和imu内参矫正
+## 相机和imu内参矫正
 ```
 # 查看上一步创建的docker容器的id
 docker ps -a 
@@ -153,7 +153,7 @@ rosrun kalibr kalibr_calibrate_imu_camera --target target.yaml --imu imu.yaml --
 ```
 将Examples/Monocular-Inertial/EuRoC.yaml相关参数用kalibr-camchain-imucam.yaml替代，并保存成mi_aprilgrid.yaml
 
-# 录制视频和惯导
+## 录制视频和惯导
 打开apk，录制视频和惯导，为了更好激活imu，录制开头需要注意移动的加速度、倾斜手机[here](https://github.com/UZ-SLAMLab/ORB_SLAM3/issues/435)。将录制好的手机上传到ubuntu系统中，并将数据处理成orb-slam需要的格式
 ```
 
@@ -172,7 +172,7 @@ python script/data2orbslam.py $data
 ./Examples/Monocular-Inertial/mono_inertial_mi ./Vocabulary/ORBvoc.txt ./Examples/Monocular-Inertial/mi_aprilgrid.yaml $data/data/
 ```
 
-# 代码修改
+## 代码修改
 代码[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L349)中的EdgeMono、EdgeMonoOnlyPose、EdgeStereo、EdgeStereoOnlyPose的jacobi不对，证明如下：  
 ```math
 t_{wb} = t_{wb} + R_{wb} * \delta t 
@@ -287,6 +287,14 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 ```
 
 根据以上推导，对代码[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc)中的EdgeMono::linearizeOplus、EdgeMonoOnlyPose::linearizeOplus、EdgeStereo::linearizeOplus、EdgeStereoOnlyPose::linearizeOplus等的jacobi进行修改。根据[EdgePriorAcc](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L778)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L765)进行修改。根据[EdgePriorGyro](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L802)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L772)进行修改。
+
+
+## 参考
+
+- [allan_variance_ros](https://github.com/ori-drs/allan_variance_ros)
+- [kalibr以及其wiki](https://github.com/ethz-asl/kalibr)
+- [VideoIMUCapture-Android](https://github.com/DavidGillsjo/VideoIMUCapture-Android)
+- [ORB-SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3)
 
 
 # ORB-SLAM3
