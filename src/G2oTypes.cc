@@ -762,14 +762,14 @@ void EdgePriorPoseImu::linearizeOplus()
 void EdgePriorAcc::linearizeOplus()
 {
     // Jacobian wrt bias
-    _jacobianOplusXi.block<3,3>(0,0) = Eigen::Matrix3d::Identity();
+    _jacobianOplusXi.block<3,3>(0,0) = -Eigen::Matrix3d::Identity();
 
 }
 
 void EdgePriorGyro::linearizeOplus()
 {
     // Jacobian wrt bias
-    _jacobianOplusXi.block<3,3>(0,0) = Eigen::Matrix3d::Identity();
+    _jacobianOplusXi.block<3,3>(0,0) = -Eigen::Matrix3d::Identity();
 
 }
 
