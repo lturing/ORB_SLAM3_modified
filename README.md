@@ -355,8 +355,6 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 \frac{\partial p_c}{\partial \delta p_w} = R_{cb} * R_{wb}^T
 ```
 
-根据以上推导，对代码[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc)中的EdgeMono::linearizeOplus、EdgeMonoOnlyPose::linearizeOplus、EdgeStereo::linearizeOplus、EdgeStereoOnlyPose::linearizeOplus等的jacobi进行修改。根据[EdgePriorAcc](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L778)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L765)进行修改。根据[EdgePriorGyro](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L802)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L772)进行修改。
-
 
 ## 参考
 
