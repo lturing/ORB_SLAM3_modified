@@ -173,6 +173,7 @@ python script/data2orbslam.py $data
 ```
 
 # 代码修改
+代码[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L349)中的EdgeMono、EdgeMonoOnlyPose、EdgeStereo、EdgeStereoOnlyPose的jacobi不对，证明如下：  
 ```math
 t_{wb} = t_{wb} + R_{wb} * \delta t 
 ```
