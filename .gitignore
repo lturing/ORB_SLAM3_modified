@@ -2,6 +2,11 @@
 *
 
 .vscode/*
+Examples/Monocular-Inertial/CameraTrajectory*
+Examples/Monocular-Inertial/KeyFrameTrajectory*
+
+Examples/Monocular/CameraTrajectory*
+Examples/Monocular/KeyFrameTrajectory*
 
 # Unignore all with extensions
 !*.*
