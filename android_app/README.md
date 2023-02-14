@@ -18,12 +18,13 @@
 # 编译的apk 保存在 app/build/outputs/apk/debug
 ```
 
-## app and settings
+## app and settings 
 
+<p float="left">
+  <img align="top" src="./../images/app.jpg" width="48%" />
+  <img align="top" src="./../images/app_settings.jpg" width="48%" /> 
+</p>
 
-app             |  settings
-:-------------------------:|:-------------------------:
-![](./../images/app.jpg)  |  ![](./../images/app_settings.jpg)
 
 参考
 [VideoIMUCapture-Android](https://github.com/DavidGillsjo/VideoIMUCapture-Android)
