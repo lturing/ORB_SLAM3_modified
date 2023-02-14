@@ -139,15 +139,11 @@ python script/data2statistics.py $data/video_meta.pb3
 # 处理成rosbag，便于kalibr处理
 python script/data2kalibr.py $data --subsample 10 --save_image true
 
-
 # 查看上一步创建的docker容器的id
 docker ps -a 
 docker start 容器id
 docker attach 容器id
 source devel/setup.bash
-
-
-
 
 # 相机内参矫正，生成kalibr-camchain.yaml
 cd $data_dir/kalibr
@@ -157,12 +153,12 @@ rosrun kalibr kalibr_calibrate_cameras --bag kalibr.bag --target target.yaml --m
 rosrun kalibr kalibr_calibrate_imu_camera --target target.yaml --imu imu.yaml --cams kalibr-camchain.yaml --bag kalibr.bag
 
 ```
-
 将Examples/Monocular-Inertial/EuRoC.yaml相关参数用kalibr-camchain-imucam.yaml替代，并保存成mi_aprilgrid.yaml
 
 # 录制视频和惯导
 打开apk，录制视频和惯导，为了更好激活imu，录制开头需要注意移动的加速度、倾斜手机[here](https://github.com/UZ-SLAMLab/ORB_SLAM3/issues/435)。将录制好的手机上传到ubuntu系统中，并将数据处理成orb-slam需要的格式
 ```
+
 cd ~/ORB_SLAM3_modified 
 # 第一次
 chmod +x ./build.sh 
@@ -179,13 +175,27 @@ python script/data2orbslam.py $data
 ```
 
 # 代码修改
-$$
-t_{wb} = t_{wb} + R_{wb} * \delta t \\
-R_{wb} = R_{wb} * Exp(\delta \theta) \\
-err = obj - est \\
-p_c = R_{cw} * p_w + t_{cw} \\
-est = K(p_c) \\ 
+```math
+t_{wb} = t_{wb} + R_{wb} * \delta t 
+```
 
+```math
+R_{wb} = R_{wb} * Exp(\delta \theta) 
+```
+
+```math
+err = obj - est 
+```
+
+```math
+p_c = R_{cw} * p_w + t_{cw} 
+```
+
+```math
+est = K(p_c) 
+```
+
+```math
 K(
   \begin{pmatrix}
   x  \\
@@ -193,57 +203,89 @@ K(
   z
   \end{pmatrix}) = 
 \begin{pmatrix}
-  \frac{f_x  x}{z} + c_x \\ 
+  \frac{f_x  x}{z} + c_x \\
   \frac{f_y  y}{z} + c_y 
   \end{pmatrix}
-\\
-\\
-$$
+```
 
 由于关于$R_{wb}$和$t_{wb}$的导数，需做以下变换
-$$
-R_{cw} = R_{cb} * R_{wb}^T \\
-t_{cw} = R_{cb} * t_{bw} + t_{cb} \\
+```math
+R_{cw} = R_{cb} * R_{wb}^T 
+```
+
+```math
+t_{cw} = R_{cb} * t_{bw} + t_{cb} 
+```
+
+```math
 t_{bw} = -R_{wb}^T * t_{wb} 
-$$
+```
+
 因此
-$$
+```math
 est = K(R_{cw} * p_w + t_{cw}) = K(R_{cb} * R_{wb}^T * p_w - R_{cb} * R_{wb}^T * t_{wb} + t_{cb})
-$$
-记$p_c = R_{cb} * R_{wb}^T * p_w - R_{cb} * R_{wb}^T * t_{wb} + t_{cb} = R_{cb} * R_{wb}^T * (p_w - t_{wb}) + t_{cb}$
+```
+
+记
+```math
+p_c = R_{cb} * R_{wb}^T * p_w - R_{cb} * R_{wb}^T * t_{wb} + t_{cb} = R_{cb} * R_{wb}^T * (p_w - t_{wb}) + t_{cb}
+```
 
 error关于R的导数  
-$$
-\frac{\partial err}{\partial \delta \theta} = \frac{\partial err}{\partial p_c} \frac{\partial p_c}{\partial \delta \theta} \\
+```math
+\frac{\partial err}{\partial \delta \theta} = \frac{\partial err}{\partial p_c} \frac{\partial p_c}{\partial \delta \theta} 
+```
+
+```math
 \frac{\partial err}{\partial p_c} =  \begin{pmatrix}
   \frac{f_x}{z} & 0 & -\frac{f_x x}{z^2}\\ 
   0 & \frac{f_y}{z} & -\frac{f_y y}{z^2}
-  \end{pmatrix} \\
+  \end{pmatrix} 
+```
 
-p_c(\delta \theta) = R_{cb} * (R_{wb} * Exp(\delta \theta))^T * (p_w - t_{wb}) + t_{cb} \\
-= R_{cb} * (I - \delta \theta ^ \land)* R_{wb}^T * (p_w - t_{wb}) + t_{cb} \\ 
-= p_c - R_{cb} * \delta \theta ^ \land * R_{wb}^T * (p_w - t_{wb}) \\ 
-= p_c + R_{cb} * (R_{wb}^T * (p_w - t_{wb})) ^ \land *  \delta \theta \\
-$$
+```math
+p_c(\delta \theta) = R_{cb} * (R_{wb} * Exp(\delta \theta))^T * (p_w - t_{wb}) + t_{cb} 
+```
+
+```math
+= R_{cb} * (I - \delta \theta ^ \land)* R_{wb}^T * (p_w - t_{wb}) + t_{cb} 
+```
+
+```math
+= p_c - R_{cb} * \delta \theta ^ \land * R_{wb}^T * (p_w - t_{wb}) 
+```
+
+```math
+= p_c + R_{cb} * (R_{wb}^T * (p_w - t_{wb})) ^ \land *  \delta \theta 
+```
+
 所以
-$$
+```math
 \frac{\partial p_c}{\partial \delta \theta} = R_{cb} * (R_{wb}^T * (p_w - t_{wb})) ^ \land
-$$
-同理
-$$
-p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb} \\
-= p_c - R_{cb} * R_{wb}^T * R_{wb} * \delta t  \\
-= p_c - R_{cb} * \delta t
-$$
-所以
-$$
-\frac{\partial p_c}{\partial \delta t} = - R_{cb}
-$$
+```
 
 同理
-$$
+```math
+p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb} 
+```
+
+```math
+= p_c - R_{cb} * R_{wb}^T * R_{wb} * \delta t  
+```
+
+```math
+= p_c - R_{cb} * \delta t
+```
+
+所以
+```math
+\frac{\partial p_c}{\partial \delta t} = - R_{cb}
+```
+
+同理
+```math
 \frac{\partial p_c}{\partial \delta p_w} = R_{cb} * R_{wb}^T
-$$
+```
 
 # ORB-SLAM3
 
