@@ -26,8 +26,8 @@ sdkmanager "ndk;21.0.6113669" # 安装ndk version=21.0.6113669
 
 # 编译apk
 cd $HOME
-git clone 
-cd android_app
+git clone https://github.com/lturing/ORB_SLAM3_modified.git
+cd ORB_SLAM3_modified/android_app
 ./gradlew assembleDebug # 打包成apk
 
 # 编译好的apk在目录 app/build/outputs/apk/debug
@@ -40,7 +40,7 @@ cd android_app
 ### 处理数据
 
 ```
-cd /data/ORB_SLAM3_modified
+cd ~/ORB_SLAM3_modified
 # 安装依赖包
 unzip protoc-21.5-linux-x86_64.zip -d protoc-21.5
 mkdir proto_python 
@@ -173,7 +173,76 @@ python script/data2orbslam.py $data
 ```
 
 ## 代码修改
-代码[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L349)中的EdgeMono、EdgeMonoOnlyPose、EdgeStereo、EdgeStereoOnlyPose的jacobi不对，证明如下：  
+1. 增加rbg显示，根据配置文件中[isColor](https://github.com/lturing/ORB_SLAM3_modified/blob/main/Examples/Monocular-Inertial/mi_8_by_aprilgrid_1.yaml#L47)标志，决定rbg还是gray   
+2. g2o中的[se3quat的exp](https://github.com/lturing/ORB_SLAM3_modified/blob/main/Thirdparty/g2o/g2o/types/se3quat.h#L223)有误，证明如下：   
+```c++
+R = (Matrix3d::Identity()
+              + sin(theta)/theta *Omega
+              + (1-cos(theta))/(theta*theta)*Omega2);
+
+V = (Matrix3d::Identity()
+  + (1-cos(theta))/(theta*theta)*Omega
+  + (theta-sin(theta))/(pow(theta,3))*Omega2);
+```    
+当theta很小时(小于0.00001)，R和V可以简化为
+```math
+R = Matrix3d::Identity() + \frac{sin(\theta)}{\theta} *Omega + \frac{1-cos(\theta)}{\theta^2}*Omega2;
+```
+```math
+cos(\theta)=1 - 2 * sin^2(\frac{\theta}{2}) \approx 1 - 2 * (\frac{\theta}{2})^2
+```
+
+```math
+1 - cos(\theta) \approx \frac{\theta^2}{2}
+```
+
+```math
+R \approx Matrix3d::Identity() + Omega + 0.5 * Omega2
+```
+同理
+```math
+V = Matrix3d::Identity() + \frac{1-cos(\theta)}{\theta^2} * Omega + \frac{\theta-sin(\theta)}{\theta^3} * Omega2
+```
+根据泰勒展开式
+```math
+sin(\theta) \approx \theta - \frac{\theta^3}{3!} + \frac{\theta^5}{5!}
+```
+故
+```math
+\frac{\theta-sin(\theta)}{\theta^3} \approx \frac{1.}{6}
+```
+故
+```math
+V \approx Matrix3d::Identity() + 0.5 * Omega + \frac{1.}{6} * Omega2
+```
+对于se3 $\delta$ 
+```math
+\delta = \begin{pmatrix} \theta \\ t \end{pmatrix}
+```
+
+又
+```math 
+e^\delta = \begin{pmatrix}
+  R & Vt \\
+  0 & 1 
+  \end{pmatrix}
+```
+故当t很小时
+```math
+V \approx Matrix3d::Identity()
+```
+
+```math
+R \approx Matrix3d::Identity() + Omega
+```
+
+3. 根据[EdgePriorAcc](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L778)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L765)进行修改
+
+4. 根据[EdgePriorGyro](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L802)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L772)进行修改
+
+## 代码中部分jacobi推导
+
+[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L349)中的EdgeMono、EdgeMonoOnlyPose、EdgeStereo、EdgeStereoOnlyPose的jacobi推导
 ```math
 t_{wb} = t_{wb} + R_{wb} * \delta t 
 ```
@@ -285,8 +354,6 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 ```math
 \frac{\partial p_c}{\partial \delta p_w} = R_{cb} * R_{wb}^T
 ```
-
-根据以上推导，对代码[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc)中的EdgeMono::linearizeOplus、EdgeMonoOnlyPose::linearizeOplus、EdgeStereo::linearizeOplus、EdgeStereoOnlyPose::linearizeOplus等的jacobi进行修改。根据[EdgePriorAcc](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L778)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L765)进行修改。根据[EdgePriorGyro](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L802)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L772)进行修改。
 
 
 ## 参考
