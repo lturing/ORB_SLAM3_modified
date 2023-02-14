@@ -104,8 +104,6 @@ rosrun allan_variance_ros analysis.py --data /data/path/to/imu_data/allan_varian
 
 根据我们的经验，对于成本最低的传感器，可能需要将噪声模型参数增加10倍或更多[here](https://github.com/ethz-asl/kalibr/wiki/IMU-Noise-Model)
 
-
-
 # 相机和imu内参矫正
 ```
 # 查看上一步创建的docker容器的id
@@ -208,7 +206,7 @@ K(
   \end{pmatrix}
 ```
 
-由于关于$R_{wb}$和$t_{wb}$的导数，需做以下变换
+由于关于 $R_{wb}$ 和 $t_{wb}$ 的导数，需做以下变换
 ```math
 R_{cw} = R_{cb} * R_{wb}^T 
 ```
