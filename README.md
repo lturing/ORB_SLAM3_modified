@@ -26,8 +26,8 @@ sdkmanager "ndk;21.0.6113669" # 安装ndk version=21.0.6113669
 
 # 编译apk
 cd $HOME
-git clone 
-cd android_app
+git clone https://github.com/lturing/ORB_SLAM3_modified.git
+cd ORB_SLAM3_modified/android_app
 ./gradlew assembleDebug # 打包成apk
 
 # 编译好的apk在目录 app/build/outputs/apk/debug
@@ -40,7 +40,7 @@ cd android_app
 ### 处理数据
 
 ```
-cd /data/ORB_SLAM3_modified
+cd ~/ORB_SLAM3_modified
 # 安装依赖包
 unzip protoc-21.5-linux-x86_64.zip -d protoc-21.5
 mkdir proto_python 
@@ -173,7 +173,7 @@ python script/data2orbslam.py $data
 ```
 
 ## 代码修改
-1. 增加rbg显示，根据配置文件中[isColor]()标志，决定rbg还是gray   
+1. 增加rbg显示，根据配置文件中[isColor](https://github.com/lturing/ORB_SLAM3_modified/blob/main/Examples/Monocular-Inertial/mi_8_by_aprilgrid_1.yaml#L47)标志，决定rbg还是gray   
 2. g2o中的[se3quat的exp](https://github.com/lturing/ORB_SLAM3_modified/blob/main/Thirdparty/g2o/g2o/types/se3quat.h#L223)有误，证明如下：   
 ```c++
 R = (Matrix3d::Identity()
