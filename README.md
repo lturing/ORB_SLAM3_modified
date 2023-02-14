@@ -3,7 +3,7 @@
 * ubuntu20
 * 小米9se
 
-基于小米9se的单目imu，30fps + 300hz imu。通过本仓库提供的安卓应用获取图像和imu信息，并在ubuntu上处理成orb-slam3的数据格式和运行。
+基于小米9se的单目imu，30fps + 300hz imu。通过本仓库提供的[安卓应用](https://github.com/lturing/ORB_SLAM3_modified/tree/main/android_app)获取图像和imu信息，并在ubuntu上处理成orb-slam3的数据格式和运行。
 
 <div align=center><img src="./images/流程.png" width="60%"/></div>
 
@@ -284,6 +284,9 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 ```math
 \frac{\partial p_c}{\partial \delta p_w} = R_{cb} * R_{wb}^T
 ```
+
+根据以上推导，对代码[G2oTypes](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc)中的EdgeMono::linearizeOplus、EdgeMonoOnlyPose::linearizeOplus、EdgeStereo::linearizeOplus、EdgeStereoOnlyPose::linearizeOplus等的jacobi进行修改。根据[EdgePriorAcc](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L778)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L765)进行修改。根据[EdgePriorGyro](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L802)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L772)进行修改。
+
 
 # ORB-SLAM3
 
