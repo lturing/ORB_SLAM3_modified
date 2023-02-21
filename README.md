@@ -332,6 +332,10 @@ p_c(\delta \theta) = R_{cb} * (R_{wb} * Exp(\delta \theta))^T * (p_w - t_{wb}) +
 \frac{\partial p_c}{\partial \delta \theta} = R_{cb} * (R_{wb}^T * (p_w - t_{wb})) ^ \land
 ```
 
+```math
+\frac{\partial p_c}{\partial \delta \theta} = R_{cb} * p_b ^ \land
+```
+
 同理
 ```math
 p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb} 
