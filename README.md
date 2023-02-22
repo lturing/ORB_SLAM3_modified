@@ -369,7 +369,8 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 - [kalibr以及其wiki](https://github.com/ethz-asl/kalibr)
 - [VideoIMUCapture-Android](https://github.com/DavidGillsjo/VideoIMUCapture-Android)
 - [ORB-SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3)
-
+- [VIO-Doc](https://github.com/StevenCui/VIO-Doc)
+- [IMU-Preintegration-Propogation-Doc](https://github.com/PetWorm/IMU-Preintegration-Propogation-Doc)
 
 # ORB-SLAM3
 
