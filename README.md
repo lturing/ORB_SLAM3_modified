@@ -5,6 +5,9 @@
 
 基于小米9se的单目imu，30fps + 300hz imu。通过本仓库提供的[安卓应用](https://github.com/lturing/ORB_SLAM3_modified/tree/main/android_app)获取图像和imu信息，并在ubuntu上处理成orb-slam3的数据格式和运行。
 
+* [单目demo](https://www.bilibili.com/video/BV1is4y1b7RU)
+* [单目inertial demo](https://www.bilibili.com/video/BV11M411J7jH)
+
 <div align=center><img src="./images/流程.png" width="60%"/></div>
 
 ## 安卓编译(通过安卓手机获取图像、加速度、角速度等信息)
@@ -163,7 +166,7 @@ chmod +x ./build.sh
 ./build.sh 
 
 data=/path/to/data
-python script/data2orbslam.py $data
+python script/data2orbslam.py --data_dir $data
 
 # 运行orb-slam mono
 ./Examples/Monocular/mono_mi ./Vocabulary/ORBvoc.txt ./Examples/Monocular-Inertial/mi_aprilgrid.yaml $data/data/
