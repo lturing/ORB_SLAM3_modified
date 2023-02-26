@@ -3,14 +3,17 @@
 * ubuntu20
 * 小米9se
 
-基于小米9se的单目imu，30fps + 300hz imu。通过本仓库提供的[安卓应用](https://github.com/lturing/ORB_SLAM3_modified/tree/main/android_app)获取图像和imu信息，并在ubuntu上处理成orb-slam3的数据格式和运行。
-
-* [单目demo](https://www.bilibili.com/video/BV1is4y1b7RU)
-* [单目inertial demo](https://www.bilibili.com/video/BV11M411J7jH)
+基于小米9se的单目imu，30fps + 300hz imu。通过本仓库提供的[安卓应用](https://github.com/lturing/ORB_SLAM3_modified/tree/main/android_app)获取图像和imu信息，并在ubuntu上处理成orb-slam3的数据格式和运行。流程如下图所示：
 
 <div align=center><img src="./images/流程.png" width="60%"/></div>
 
-## 安卓编译(通过安卓手机获取图像、加速度、角速度等信息)
+## demo 
+* [单目demo](https://www.bilibili.com/video/BV1is4y1b7RU)
+* [单目inertial demo](https://www.bilibili.com/video/BV11M411J7jH)
+
+<div align=center><img src="./images/result.jpg" width="60%"/></div>
+
+## **[安卓编译(通过安卓手机获取图像、加速度、角速度等信息)](./android_app)**
 
 ```
 # 安装jdk，并添加环境变量
