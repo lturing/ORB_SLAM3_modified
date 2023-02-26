@@ -11,7 +11,7 @@
 * [单目demo](https://www.bilibili.com/video/BV1is4y1b7RU)
 * [单目inertial demo](https://www.bilibili.com/video/BV11M411J7jH)
 
-<div align=center><img src="./images/result.jpg" width="60%"/></div>
+<div align=center><img src="./images/result.jpg" width="80%"/></div>
 
 ## **[安卓编译(通过安卓手机获取图像、加速度、角速度等信息)](./android_app)**
 
