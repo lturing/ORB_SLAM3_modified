@@ -375,6 +375,10 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 - [VIO-Doc](https://github.com/StevenCui/VIO-Doc)
 - [IMU-Preintegration-Propogation-Doc](https://github.com/PetWorm/IMU-Preintegration-Propogation-Doc)
 
+<br>
+<details>
+  <summary><strong>offical readme</strong></summary>
+
 # ORB-SLAM3
 
 ### V1.0, December 22th, 2021
@@ -633,3 +637,5 @@ A flag in `include\Config.h` activates time measurements. It is necessary to unc
 # 9. Calibration
 
 You can find a tutorial for visual-inertial calibration and a detailed description of the contents of valid configuration files at  `Calibration_Tutorial.pdf`
+
+</details>
