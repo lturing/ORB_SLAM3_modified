@@ -377,7 +377,7 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 
 <br>
 <details>
-  <summary><strong>offical readme</strong></summary>
+  <summary><strong>offical readme</strong>(click to expand)</summary>
 
 # ORB-SLAM3
 
