@@ -71,6 +71,10 @@ Examples/Monocular/mono_tum
 Examples/Monocular/mono_tum_vi
 Examples/Monocular/mono_realsense_t265
 Examples/Monocular/mono_mi 
+Examples/Monocular/mono_cloudpoint
+Examples/Monocular/mono_cloudpoint_depth_seg
+cloudpoint*.pcd
+cloudpoints*.ply
 
 Examples/Stereo/stereo_euroc
 Examples/Stereo/stereo_kitti
@@ -106,6 +110,22 @@ Examples/Tests/sophus_test
 
 Examples/ROS/ORB_SLAM3/CMakeLists.txt.user
 Examples/ROS/ORB_SLAM3/build/
+
+
+Examples_old/Monocular-Inertial/mono_inertial_euroc_old
+Examples_old/Monocular-Inertial/mono_inertial_tum_vi_old
+Examples_old/Monocular/mono_euroc_old
+Examples_old/Monocular/mono_kitti_old
+Examples_old/Monocular/mono_tum_old
+Examples_old/Monocular/mono_tum_vi_old
+Examples_old/RGB-D/rgbd_tum_old
+Examples_old/Stereo-Inertial/stereo_inertial_euroc_old
+Examples_old/Stereo-Inertial/stereo_inertial_tum_vi_old
+Examples_old/Stereo/stereo_euroc_old
+Examples_old/Stereo/stereo_kitti_old
+Examples_old/Stereo/stereo_tum_vi_old
+
+
 
 KeyFrameTrajectory.txt
 CameraTrajectory.txt
