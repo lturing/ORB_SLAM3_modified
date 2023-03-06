@@ -1,7 +1,8 @@
 
 按照[教程](./INSTALL.md)安装相应的环境，参照[run_test.sh](./run_test.sh)运行代码
 
-
+### 参考
+- [OneFormer](https://github.com/SHI-Labs/OneFormer)
 
 <br>
 <details>
