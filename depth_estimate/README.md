@@ -1,3 +1,12 @@
+参照[predict_depth.py](./predict_depth.py)，运行代码
+
+### 参考
+- [ZoeDepth](https://github.com/isl-org/ZoeDepth)
+
+<br>
+<details>
+  <summary><strong>offical readme</strong>(click to expand)</summary>
+  
 # **ZoeDepth: Combining relative and metric depth** (Official implementation)  <!-- omit in toc -->
 [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/isl-org/ZoeDepth)
 
@@ -222,7 +231,7 @@ python train_mix.py -m zoedepth_nk --pretrained_resource=""
 
 ```
 
-
+</details>
 
 
 

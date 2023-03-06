@@ -1,3 +1,13 @@
+
+按照[教程](./INSTALL.md)安装相应的环境，参照[run_test.sh](./run_test.sh)运行代码
+
+### 参考
+- [OneFormer](https://github.com/SHI-Labs/OneFormer)
+
+<br>
+<details>
+  <summary><strong>offical readme</strong>(click to expand)</summary>
+
 # OneFormer: One Transformer to Rule Universal Image Segmentation
 
 [![Framework: PyTorch](https://img.shields.io/badge/Framework-PyTorch-orange.svg)](https://pytorch.org/) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SHI-Labs/OneFormer/blob/main/colab/oneformer_colab.ipynb) [![HuggingFace space](https://img.shields.io/badge/🤗-HuggingFace%20Space-cyan.svg)](https://huggingface.co/spaces/shi-labs/OneFormer) [![HuggingFace transformers](https://img.shields.io/badge/🤗-HuggingFace%20transformers-magenta.svg)](https://huggingface.co/docs/transformers/main/en/model_doc/oneformer) [![YouTube](https://badges.aleen42.com/src/youtube.svg)](https://youtu.be/_Zr1pOi7Chw) [![License](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
@@ -140,3 +150,6 @@ If you found OneFormer useful in your research, please consider starring ⭐ us 
 ## Acknowledgement
 
 We thank the authors of [Mask2Former](https://github.com/facebookresearch/Mask2Former), [GroupViT](https://github.com/NVlabs/GroupViT), and [Neighborhood Attention Transformer](https://github.com/SHI-Labs/Neighborhood-Attention-Transformer) for releasing their helpful codebases.
+
+ 
+ </details>
