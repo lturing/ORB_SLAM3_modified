@@ -1,7 +1,7 @@
 参照[predict_depth.py](./predict_depth.py)，运行代码
 
 ### 参考
-[ZoeDepth](https://github.com/isl-org/ZoeDepth)
+- [ZoeDepth](https://github.com/isl-org/ZoeDepth)
 
 <br>
 <details>
