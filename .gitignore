@@ -1,5 +1,53 @@
 # Ignore all
-*
+
+#
+depth_estimate/master.zip
+depth_estimate/ZoeD_M12_N.pt
+
+image_segmentation/coco_pretrain_1280x1280_150_16_dinat_l_oneformer_ade20k_160k.pth
+image_segmentation/mapillary_pretrain_250_16_convnext_l_oneformer_cityscapes_90k.pth
+image_segmentation/road/*
+image_segmentation/road_color/*
+image_segmentation/semantic_inference/*
+image_segmentation/panoptic_inference/*
+image_segmentation/instance_inference/*
+
+
+# output dir
+.DS_Store
+output
+instant_test_output
+inference_test_output
+
+# compilation and distribution
+__pycache__
+_ext
+*.pyc
+*.pyd
+*.so
+*.dll
+*.egg-info/
+build/
+dist/
+wheels/
+
+# pytorch/python/numpy formats
+*.pth
+*.pkl
+*.npy
+*.ts
+model_ts*.txt
+
+# ipython/jupyter notebooks
+**/.ipynb_checkpoints/
+
+# Editor temporaries
+*.swn
+*.swo
+*.swp
+*~
+
+
 
 .vscode/*
 Examples/Monocular-Inertial/CameraTrajectory*
@@ -7,12 +55,6 @@ Examples/Monocular-Inertial/KeyFrameTrajectory*
 
 Examples/Monocular/CameraTrajectory*
 Examples/Monocular/KeyFrameTrajectory*
-
-# Unignore all with extensions
-!*.*
-
-# Unignore all dirs
-!*/
 
 CMakeLists.txt.user
 CMakeLists_modified.txt
