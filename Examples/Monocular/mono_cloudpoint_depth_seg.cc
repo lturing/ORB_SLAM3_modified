@@ -7,6 +7,7 @@
 #include<fstream>
 #include <sstream>
 #include <iomanip>
+#include<string>
 
 #include<thread>
 #include <condition_variable>
@@ -15,6 +16,7 @@
 
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/common/projection_matrix.h>
+#include <pcl/visualization/pcl_visualizer.h>
 
 #include <pcl/common/transforms.h>
 #include <pcl/point_types.h>
@@ -94,15 +96,17 @@ int main(int argc, char **argv)
     mK.at<float>(0,2) = mpCamera->getParameter(2);
     mK.at<float>(1,2) = mpCamera->getParameter(3);
 
-    pcl::visualization::CloudViewer viewer("viewer");
+
+    pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+    viewer->setBackgroundColor (0, 0, 0);
 
     cout << "start building cloud points" << endl;
     ifstream f;
     f.open(keyFrameFile.c_str());
     cv::Mat im;
     cv::Mat imD;
-    pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
-
+    
+    int line = 0;
     while (!f.eof())
     {
         string s;
@@ -119,7 +123,7 @@ int main(int argc, char **argv)
             long imgname = std::stol(token);
 
             string imgPath = imgDir + "/" + std::to_string(imgname) + ".png";
-            cout << imgPath << " " << cloud->points.size() << endl;
+            //cout << imgPath << " " << cloud->points.size() << endl;
             string depPath = depDir + "/" + std::to_string(imgname) + ".png";
             float pose[7];
             for (int i = 0; i < 7; i++)
@@ -151,9 +155,7 @@ int main(int argc, char **argv)
 
             std::vector<cv::KeyPoint> mvKeys;
             std::vector<cv::KeyPoint> mvKeysUn;
-            int count = 0;
-            bool flag = true;
-            int stride = 16;
+            int stride = 8;
             for (int i = 0; i < im.rows; i += stride)
             {
                 for (int j = 0; j < im.cols; j+= stride)
@@ -162,17 +164,12 @@ int main(int argc, char **argv)
                     kp.pt.x = i;
                     kp.pt.y = j;
                     mvKeys.push_back(kp);
-                    if (flag)
-                        count += 1;
                 }
-
-                flag = false;
-
-
             }
 
             UndistortKeyPoints(mpCamera, mDistCoef, mK, mvKeys, mvKeysUn);
 
+            pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
             for (int i = 0; i < im.rows; i += stride)
             {
                 for (int j = 0; j < im.cols; j += stride)
@@ -182,7 +179,7 @@ int main(int argc, char **argv)
                     int jj = j / stride;
                     
                     //cv::KeyPoint kp = mvKeysUn[i * im.cols + j ];
-                    cv::KeyPoint kp = mvKeysUn[ii * count + jj ];
+                    cv::KeyPoint kp = mvKeysUn[ii * ((im.cols-1) / stride + 1) + jj ];
                     float x = (kp.pt.x - mK.at<float>(0,2)) / mK.at<float>(0,0);
                     float y = (kp.pt.y - mK.at<float>(1,2)) / mK.at<float>(1,1);
 
@@ -210,28 +207,37 @@ int main(int argc, char **argv)
                 }
             }
 
-            //cloud->is_dense = false;
+            cloud->is_dense = false;
 
             cloud->width = cloud->points.size();
             cloud->height = 1;
-        
-            viewer.showCloud( cloud );
+
+            viewer->addPointCloud<PointT> (cloud, "sample cloud" + std::to_string(line));
+
+            //viewer->setCameraPosition(pose[0], pose[1], pose[2], 0, 0, 0);
+            //viewer->initCameraParameters ();
+            viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "sample cloud" + std::to_string(line));
+            viewer->spinOnce ();
+            pcl_sleep(0.1);
             //break;
-            
+            line += 1;
         }
 
     }
 
-    cloud->is_dense = false;
+    cout << "end building cloud points" << endl;
 
-    cloud->width = cloud->points.size();
-    cloud->height = 1;
+    while (!viewer->wasStopped ()) 
+    {   
+        viewer->spinOnce (); 
+        pcl_sleep (0.01);
+    }   
 
-    viewer.showCloud( cloud );
     //pcl::io::savePLYFileBinary("cloudpoints.ply", *cloud);
 
-    pcl::io::savePCDFileASCII ("cloudpoint_pcd_from_depth.pcd", *cloud);
+    //pcl::io::savePCDFileASCII ("cloudpoint_pcd_from_depth.pcd", *cloud);
 
+    
     cin.get();
     return 0;
 }
@@ -271,6 +277,3 @@ void UndistortKeyPoints(ORB_SLAM3::GeometricCamera* mpCamera, cv::Mat& mDistCoef
         mvKeysUn[i]=kp;
     }
 }
-
-
-
