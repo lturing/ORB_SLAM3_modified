@@ -44,7 +44,7 @@ Camera.fps: 30 #.0
 Camera.RGB: 0
 
 
-isColor: 0
+isColor: 1
 
 # Transformation from camera to body-frame (imu)
 IMU.T_b_c1: !!opencv-matrix

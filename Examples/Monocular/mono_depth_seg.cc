@@ -2,7 +2,6 @@
 
 #include<chrono>
 
-
 #include<iostream>
 #include<fstream>
 #include <sstream>
@@ -50,7 +49,7 @@ int main(int argc, char **argv)
     cout << "argc: " << argc << endl;
     if(argc < 5)
     {
-        cerr << endl << "Usage: ./mono_depth path_to_settings img_folder depth_folder keyframeTrajectory" << endl;
+        cerr << endl << "Usage: ./mono_depth_seg path_to_settings img_folder depth_folder keyframeTrajectory" << endl;
         return 1;
     }
 
@@ -106,7 +105,14 @@ int main(int argc, char **argv)
     cv::Mat im;
     cv::Mat imD;
     
-    int line = 0;
+    long num_points = 0;
+    int line_cnt = 0;
+    cv::namedWindow("rgb", cv::WINDOW_NORMAL);
+    cv::resizeWindow("rgb", 300, 400);
+    
+    cv::namedWindow("depth", cv::WINDOW_NORMAL);
+    cv::resizeWindow("depth", 300, 400);
+
     while (!f.eof())
     {
         string s;
@@ -168,7 +174,6 @@ int main(int argc, char **argv)
             }
 
             UndistortKeyPoints(mpCamera, mDistCoef, mK, mvKeys, mvKeysUn);
-
             pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
             for (int i = 0; i < im.rows; i += stride)
             {
@@ -186,7 +191,7 @@ int main(int argc, char **argv)
                     //kp = mvKeys[i * im.cols + j];
                     float z = (float) imD.at<uchar>(i, j) / 25.0;
 
-                    if (z < 0.01)
+                    if (z < 0.01 || z > 6.0)
                         continue;
 
                     Eigen::Vector3f pc(x * z, y * z, z);
@@ -207,28 +212,34 @@ int main(int argc, char **argv)
                 }
             }
 
-            cv::imshow("Frame", im);
-            cv::waitKey(0.001);
-
             cloud->is_dense = false;
 
             cloud->width = cloud->points.size();
             cloud->height = 1;
+            viewer->addPointCloud<PointT> (cloud, "sample cloud" + std::to_string(line_cnt));
 
-            viewer->addPointCloud<PointT> (cloud, "sample cloud" + std::to_string(line));
+            num_points += cloud->points.size();
+            //Eigen::Vector3f up_vector = Twc.rotationMatrix() * Eigen::Vector3f(0, -1, 0);
 
-            //viewer->setCameraPosition(pose[0], pose[1], pose[2], 0, 0, 0);
             //viewer->initCameraParameters ();
-            viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "sample cloud" + std::to_string(line));
-            viewer->spinOnce ();
-            pcl_sleep(0.1);
-            //break;
-            line += 1;
+            //viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "sample cloud"+ std::to_string(line));
+            //viewer->spinOnce (1);
+            viewer->spinOnce (100.0);
+            pcl_sleep(0.2);
+            //viewer->setCameraPosition(pose[0], pose[1], pose[2], 0, 0, 0, up_vector(0), up_vector(1), up_vector(2));
+
+            cv::imshow("rgb", im);
+            cv::waitKey(1);
+
+            cv::imshow("depth", imD);
+            cv::waitKey(1);
+            line_cnt += 1;
+
         }
 
     }
 
-    cout << "end building cloud points" << endl;
+    cout << "end building cloud points, " << num_points << " points" << endl;
 
     while (!viewer->wasStopped ()) 
     {   
@@ -280,3 +291,6 @@ void UndistortKeyPoints(ORB_SLAM3::GeometricCamera* mpCamera, cv::Mat& mDistCoef
         mvKeysUn[i]=kp;
     }
 }
+
+
+

@@ -49,6 +49,7 @@ include_directories(
 ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
 ${PROJECT_SOURCE_DIR}/include/CameraModels
+${PROJECT_SOURCE_DIR}/include/AR
 ${PROJECT_SOURCE_DIR}/Thirdparty/Sophus
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
@@ -63,6 +64,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 add_library(${PROJECT_NAME} SHARED
 src/System.cc
+src/ViewAR.cc
 src/CloudPoint.cc
 src/Tracking.cc
 src/LocalMapping.cc
@@ -94,6 +96,7 @@ src/Settings.cc
 
 include/System.h
 include/CloudPoint.h
+include/ViewAR.h
 include/Tracking.h
 include/LocalMapping.h
 include/LoopClosing.h
@@ -116,6 +119,9 @@ include/G2oTypes.h
 include/CameraModels/GeometricCamera.h
 include/CameraModels/Pinhole.h
 include/CameraModels/KannalaBrandt8.h
+include/AR/RenderTree.h 
+include/AR/Shader.h
+include/AR/Util.h
 include/OptimizableTypes.h
 include/MLPnPsolver.h
 include/GeometricTools.h
@@ -414,12 +420,20 @@ target_link_libraries(mono_inertial_mi ${PROJECT_NAME})
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular)
-add_executable(mono_cloudpoint
-        Examples/Monocular/mono_cloudpoint.cc)
-target_link_libraries(mono_cloudpoint ${PROJECT_NAME})
+add_executable(mono_mi_cloudpoint
+        Examples/Monocular/mono_mi_cloudpoint.cc)
+target_link_libraries(mono_mi_cloudpoint ${PROJECT_NAME})
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular)
-add_executable(mono_cloudpoint_depth_seg
-        Examples/Monocular/mono_cloudpoint_depth_seg.cc)
-target_link_libraries(mono_cloudpoint_depth_seg ${PROJECT_NAME})
+add_executable(mono_depth_seg
+        Examples/Monocular/mono_depth_seg.cc)
+target_link_libraries(mono_depth_seg ${PROJECT_NAME})
+
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular)
+add_executable(mono_semantic
+        Examples/Monocular/mono_semantic.cc)
+target_link_libraries(mono_semantic ${PROJECT_NAME})
+
+

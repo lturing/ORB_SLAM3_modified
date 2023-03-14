@@ -7,9 +7,19 @@
 
 <div align=center><img src="./images/流程.png" width="60%"/></div>
 
+在orbslam3的基础上，加入AR模块，并支持自定义的3维物体。根据orbslam3保存的关键帧以及其位姿，结合单目深度估计和图像语义分割模型，进行3维语义重建。
+
+
 ## demo 
-* [单目demo](https://www.bilibili.com/video/BV1is4y1b7RU)
-* [单目inertial demo](https://www.bilibili.com/video/BV11M411J7jH)
+* [单目](https://www.bilibili.com/video/BV1is4y1b7RU)
+* [单目imu](https://www.bilibili.com/video/BV11M411J7jH)
+* [基于ZoeDepth的单目深度估计](https://www.bilibili.com/video/BV1uT411e7yd)
+* [基于OneFormer的图像分割](https://www.bilibili.com/video/BV1W84y1K7MH)
+* [手机相机单目三维重建](https://www.bilibili.com/video/BV1ub411f7Vj/)
+* [手机相机单目语义三维重建](https://www.bilibili.com/video/BV19Y41167Ww)
+* [AR 立方块](https://www.bilibili.com/video/BV1bk4y1h7um)
+* [AR 自定义3维物体](https://www.bilibili.com/video/BV1QY4y197dy)
+
 
 <div align=center><img src="./images/result.jpg" width="80%"/></div>
 
@@ -178,6 +188,71 @@ python script/data2orbslam.py --data_dir $data
 ./Examples/Monocular-Inertial/mono_inertial_mi ./Vocabulary/ORBvoc.txt ./Examples/Monocular-Inertial/mi_aprilgrid.yaml $data/data/
 ```
 
+## 三维语义重建
+根据orbslam3保存的关键帧以及其位姿，结合单目深度估计模型Zoedepth和图像分割模型OneFormer，进行单目3维语义重建。[单目深度估计](./depth_estimate/)和[图像分割](./image_segmentation/)
+```
+# 准备工作
+# 安装cmake-gui 
+sudo apt install cmake-gui
+
+# 安装qt5版本在5.12以上
+# https://download.qt.io/archive/qt/5.13/5.13.2/
+chmod +x ./qt-opensource-linux-x64-5.13.2.run 
+sudo ./qt-opensource-linux-x64-5.13.2.run
+将/path/to/Qt5.13.2/5.13.2/gcc_64/bin和/path/to/Qt5.13.2/Tools/QtCreator/bin添加到环境变量中
+
+# 安装VTK
+# https://www.vtk.org/files/release/9.2/VTK-9.2.6.tar.gz
+
+# 解压并打开cmake-gui，source code 目录设置成VTK-9.2.6，build为VTK-9.2.6下的，选中grouped和advanced，然后点击configure，在search中输入qt，全部改为yes，重新configure和generate
+在命令行中进入build的目录
+make -j4 
+sudo make install 
+
+# 安装pcl
+# https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.13.0/source.zip
+解压并进入pcl-1.13.0目录
+make build
+cd build
+cmake .. 
+sudo make install
+
+# 由于pcl编译用的c++14，故需要修改orbslam3中的CMakeLists.txt 
+sed -i 's/++11/++14/g' CMakeLists.txt
+
+# 根据orbslam3保存的关键帧，分别用单目深度估计和图像分割模型进行处理
+
+# 三维重建(orbslam3位姿+三角化)
+export img_dir=/path/to/img  # 图像所在目录
+./Examples/Monocular/mono_mi_cloudpoint ./Vocabulary/ORBvoc.txt ./Examples/Monocular/mi.yaml $img_dir ./Examples/Monocular/KeyFrameTrajectory_mi.txt
+
+# 三维重建(orbslam3位姿+单目预测)
+export img_dir=/path/to/img # 图像所在目录
+export depth_dir=/path/to/depth_prediction_dir # 图像深度估计所在目录
+./Examples/Monocular/mono_depth_seg ./Examples/Monocular/mi.yaml $img_dir $depth_dir ./Examples/Monocular-Inertial/KeyFrameTrajectory_mi.txt
+
+# 三维语义重建(orbslam3位姿+单目预测+图像语义分割)
+export img_dir=/path/to/img # 图像所在目录
+export depth_dir=/path/to/depth_prediction_dir # 图像的深度估计所在目录
+export seg_dir=/path/to/semantic_prediction_dir # 图像的图像分割所在目录
+
+./Examples/Monocular/mono_semantic ./Examples/Monocular/mi.yaml $img_dir $depth_dir $seg_dir ./image_segmentation/color_map_cityescape.txt  ./Examples/Monocular/KeyFrameTrajectory_mi.txt
+```
+
+## AR
+```
+# 准备工作(pangolin用c++14编译的，需要安装以下包)
+git clone https://github.com/mpark/variant.git
+mkdir variant/build && cd variant/build
+cmake ..
+cmake --build . --target install
+
+# 添加ar后
+./Examples/Monocular/mono_mi ./Vocabulary/ORBvoc.txt ./Examples/Monocular-Inertial/mi_8_by_aprilgrid.yaml /home/spurs/dataset/30fps/2023_02_21_14_04_08/data/
+
+```
+
+
 ## 代码修改
 1. 增加rbg显示，根据配置文件中[isColor](https://github.com/lturing/ORB_SLAM3_modified/blob/main/Examples/Monocular-Inertial/mi_8_by_aprilgrid_1.yaml#L47)标志，决定rbg还是gray   
 2. g2o中的[se3quat的exp](https://github.com/lturing/ORB_SLAM3_modified/blob/main/Thirdparty/g2o/g2o/types/se3quat.h#L223)有误，证明如下：   
@@ -245,6 +320,11 @@ R \approx Matrix3d::Identity() + Omega
 3. 根据[EdgePriorAcc](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L778)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L765)进行修改
 
 4. 根据[EdgePriorGyro](https://github.com/lturing/ORB_SLAM3_modified/blob/main/include/G2oTypes.h#L802)对[G2oTypes中的jacobi](https://github.com/lturing/ORB_SLAM3_modified/blob/main/src/G2oTypes.cc#L772)进行修改
+
+5. 添加点云
+
+6. 添加AR
+
 
 ## 代码中部分jacobi推导
 
@@ -374,6 +454,10 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 - [ORB-SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3)
 - [VIO-Doc](https://github.com/StevenCui/VIO-Doc)
 - [IMU-Preintegration-Propogation-Doc](https://github.com/PetWorm/IMU-Preintegration-Propogation-Doc)
+- [pangolin ModelViewer](https://github.com/stevenlovegrove/Pangolin/tree/master/tools/ModelViewer)
+- [ORB_SLAM2_MonoAR](https://github.com/cyanboros/ORB_SLAM2_MonoAR)
+- [ORB_SLAM2 ROS AR](https://github.com/raulmur/ORB_SLAM2/tree/master/Examples/ROS/ORB_SLAM2)
+
 
 <br>
 <details>

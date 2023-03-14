@@ -100,6 +100,7 @@ private:
 
     cv::Mat mImGray;
     cv::Mat mImRGB;
+    cv::Mat mImPreRGB;
 
     bool mbRGB;
     bool mIsColor;
@@ -120,6 +121,8 @@ private:
 
     bool    shutDownFlag=false;
     mutex   shutDownMutex;
+
+    mutex globalMapMutex;
 
     //shared_ptr<thread>  viewerThread;
     std::thread* viewerThread;
