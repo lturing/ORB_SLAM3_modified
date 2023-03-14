@@ -19,7 +19,7 @@
 * [手机相机单目语义三维重建](https://www.bilibili.com/video/BV19Y41167Ww)
 * [AR 立方块](https://www.bilibili.com/video/BV1bk4y1h7um)
 * [AR 自定义3维物体](https://www.bilibili.com/video/BV1QY4y197dy)
-
+* [3d obj for ar](https://free3d.com/3d-models)
 
 <div align=center><img src="./images/result.jpg" width="80%"/></div>
 
