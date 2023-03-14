@@ -72,7 +72,9 @@ Examples/Monocular/mono_tum_vi
 Examples/Monocular/mono_realsense_t265
 Examples/Monocular/mono_mi 
 Examples/Monocular/mono_cloudpoint
-Examples/Monocular/mono_cloudpoint_depth_seg
+Examples/Monocular/mono_depth_seg
+Examples/Monocular/mono_semantic
+
 cloudpoint*.pcd
 cloudpoints*.ply
 
