@@ -39,6 +39,7 @@
 #include "Viewer.h"
 #include "ImuTypes.h"
 #include "Settings.h"
+#include "ViewAR.h"
 
 
 namespace ORB_SLAM3
@@ -79,6 +80,7 @@ class Tracking;
 class LocalMapping;
 class LoopClosing;
 class Settings;
+class ViewerAR;
 
 class System
 {
@@ -229,12 +231,15 @@ private:
 
     FrameDrawer* mpFrameDrawer;
     MapDrawer* mpMapDrawer;
+    
+    ViewerAR* mpViewerAR;
 
     // System threads: Local Mapping, Loop Closing, Viewer.
     // The Tracking thread "lives" in the main execution thread that creates the System object.
     std::thread* mptLocalMapping;
     std::thread* mptLoopClosing;
     std::thread* mptViewer;
+    std::thread* mptViewerAR;
 
     // Reset flag
     std::mutex mMutexReset;
@@ -262,6 +267,8 @@ private:
     string mStrVocabularyFilePath;
 
     Settings* settings_;
+    cv::Mat mK;
+    cv::Mat mDistCoef;
 };
 
 }// namespace ORB_SLAM

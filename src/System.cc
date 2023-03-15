@@ -236,6 +236,33 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
         mpViewer->both = mpFrameDrawer->both;
     }
 
+    if(settings_->needToUndistort()){
+        mDistCoef = settings_->camera1DistortionCoef();
+    }
+    else{
+        mDistCoef = cv::Mat::zeros(4,1,CV_32F);
+    }
+
+    mpViewerAR = new ViewerAR();
+
+    float fx, fy, cx, cy;
+    fx = settings_->camera1()->getParameter(0);
+    fy = settings_->camera1()->getParameter(1);
+    cx = settings_->camera1()->getParameter(2);
+    cy = settings_->camera1()->getParameter(3);
+
+    mpViewerAR->SetCameraCalibration(fx, fy, cx, cy);
+    mpViewerAR->SetFPS(settings_->fps());
+    mpViewerAR->SetSLAM(this);
+
+    mK = cv::Mat::eye(3,3,CV_32F);
+    mK.at<float>(0,0) = fx;
+    mK.at<float>(1,1) = fy;
+    mK.at<float>(0,2) = cx;
+    mK.at<float>(1,2) = cy;
+
+    mptViewerAR = new thread(&ORB_SLAM3::ViewerAR::Run, mpViewerAR);
+
     // Fix verbosity
     Verbose::SetTh(Verbose::VERBOSITY_QUIET);
 
@@ -469,6 +496,19 @@ Sophus::SE3f System::TrackMonocular(const cv::Mat &im, const double &timestamp, 
     mTrackingState = mpTracker->mState;
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
+
+    cv::Mat imu;
+    cv::undistort(im, imu, mK, mDistCoef);
+
+    // channels equal to 1 or 3
+    if(imu.channels()<3) //this should be always true
+        cvtColor(imu,imu,cv::COLOR_GRAY2RGB);
+    else if(!settings_->rgb()) {
+        cv::cvtColor(imu,imu,cv::COLOR_BGR2RGB);
+    }
+
+    mpViewerAR->SetImagePose(imu,Converter::toCvMat(Tcw.matrix()),mTrackingState,mTrackedKeyPointsUn,mTrackedMapPoints);
+ 
 
     return Tcw;
 }

@@ -152,17 +152,17 @@ void ViewerAR::Run()
     std::vector<std::string>  mn;
     
     //266,176,254, scale=0.023
-    fn.push_back("/home/spurs/dataset/3d/3d/fish/fish.obj");
+    fn.push_back("./obj/fish/fish.obj");
     //mn.push_back("/home/spurs/dataset/3d/3d/fish/fish.jpg");
 
     // 27,210,199, scale=0.14
-    fn.push_back("/home/spurs/dataset/3d/3d/dinosaur/dinosaur.obj");
+    fn.push_back("./obj/dinosaur/dinosaur.obj");
 
     //250,176,92,scale=0.04
-    fn.push_back("/home/spurs/dataset/3d/3d/frog/frog.obj");
+    fn.push_back("./obj/frog/frog.obj");
 
     // 84,4,4, scale=0.014
-    fn.push_back("/home/spurs/dataset/3d/3d/pineapple/pineapple.obj");
+    fn.push_back("./obj/pineapple/pineapple.obj");
 
     
     for(const auto& filename : fn)
