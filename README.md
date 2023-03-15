@@ -19,7 +19,7 @@
 * [手机相机单目语义三维重建](https://www.bilibili.com/video/BV19Y41167Ww)
 * [AR 立方块](https://www.bilibili.com/video/BV1bk4y1h7um)
 * [AR 自定义3维物体](https://www.bilibili.com/video/BV1QY4y197dy)
-* [3d obj for ar](https://free3d.com/3d-models)
+
 
 <div align=center><img src="./images/result.jpg" width="80%"/></div>
 
@@ -457,7 +457,7 @@ p_c(\delta t) = R_{cb} * R_{wb}^T * (p_w - (t_{wb} + R_{wb} * \delta t)) + t_{cb
 - [pangolin ModelViewer](https://github.com/stevenlovegrove/Pangolin/tree/master/tools/ModelViewer)
 - [ORB_SLAM2_MonoAR](https://github.com/cyanboros/ORB_SLAM2_MonoAR)
 - [ORB_SLAM2 ROS AR](https://github.com/raulmur/ORB_SLAM2/tree/master/Examples/ROS/ORB_SLAM2)
-
+* [3d obj for ar](https://free3d.com/3d-models)
 
 <br>
 <details>
