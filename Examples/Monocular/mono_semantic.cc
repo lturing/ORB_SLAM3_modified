@@ -233,8 +233,8 @@ int main(int argc, char **argv)
                 for (int j = 0; j < im.cols; j+= stride)
                 {
                     cv::KeyPoint kp;
-                    kp.pt.x = i;
-                    kp.pt.y = j;
+                    kp.pt.x = j;
+                    kp.pt.y = i;
                     mvKeys.push_back(kp);
                 }
             }
