@@ -7,7 +7,7 @@
 
 <div align=center><img src="./images/流程.png" width="60%"/></div>
 
-在orbslam3的基础上，加入AR模块，并支持自定义的3维物体。根据orbslam3保存的关键帧以及其位姿，结合单目深度估计和图像语义分割模型，进行3维语义重建。
+在orbslam3的基础上，加入AR模块，并支持自定义的3维物体。根据orbslam3保存的关键帧以及其位姿，结合单目深度估计和图像语义分割模型，进行3维语义重建。orbslam3中的[跟踪线程](./images/tracking.png)，[局部地图线程](./images/localmapping.png)，[回环检测线程](./images/loopClosing.png)。
 
 
 ## demo 
@@ -21,7 +21,7 @@
 * [AR 自定义3维物体](https://www.bilibili.com/video/BV1QY4y197dy)
 
 
-<div align=center><img src="./images/result.jpg" width="80%"/></div>
+<div align=center><img src="./images/result.jpg" width="90%"/></div>
 
 ## **[安卓编译(通过安卓手机获取图像、加速度、角速度等信息)](./android_app)**
 
