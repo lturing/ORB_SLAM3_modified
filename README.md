@@ -23,6 +23,28 @@
 
 <div align=center><img src="./images/result.jpg" width="90%"/></div>
 
+** update **
+```
+# install pangolin (version: 0.6)
+wget https://github.com/stevenlovegrove/Pangolin/archive/refs/tags/v0.6.zip
+unzip pangolin && cd pangolin
+mkdir build 
+cd build
+cmake ..
+make -j4
+make install 
+
+# install boost (version: 1.71)
+wget https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.gz
+tar -zxf boost_1_71_0.tar.gz
+cd boost_1_71_0 
+chmod + ./bootstrap.sh && ./bootstrap.sh
+./b2 && sudo ./b2 install
+
+sudo ldconfig
+
+```
+
 ## **[安卓编译(通过安卓手机获取图像、加速度、角速度等信息)](./android_app)**
 
 ```
