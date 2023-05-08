@@ -38,7 +38,7 @@ make install
 wget https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.gz
 tar -zxf boost_1_71_0.tar.gz
 cd boost_1_71_0 
-chmod + ./bootstrap.sh && ./bootstrap.sh
+chmod +x ./bootstrap.sh && ./bootstrap.sh
 ./b2 && sudo ./b2 install
 
 sudo ldconfig
