@@ -12,17 +12,27 @@ import glob
 import cv2 
 
 
-# ZoeD_N
-conf = get_config("zoedepth", "infer")
+# ZoeD_N(for indoor)
+# conf = get_config("zoedepth", "infer")
+
+# ZoeD_N(for outdoor)
+conf = get_config("zoedepth", "infer", config_version="kitti")
 print(conf)
 #conf['save_dir'] = '/home/spurs/.cache/torch/hub/checkpoints'
-conf['pretrained_resource'] = 'local::./ZoeD_M12_N.pt'
-model_zoe_n = build_model(conf)
+
+# zoeD_M12_N for indoor
+# conf['pretrained_resource'] = 'local::./ZoeD_M12_N.pt'
+
+# zoeD_M12_K for outdoor 
+conf['pretrained_resource'] = 'local::./ZoeD_M12_K.pt'
+print(conf)
+
+model_zoe = build_model(conf)
 #model_zoe_n = torch.hub.load(".", "ZoeD_N", source="local", pretrained=True)
 
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-zoe = model_zoe_n.to(DEVICE)
+zoe = model_zoe.to(DEVICE)
 
 img_dir = '/home/spurs/dataset/30fps/2023_02_21_14_04_08/data/img_small/*.png'
 for img in tqdm.tqdm(glob.glob(img_dir)):
@@ -30,7 +40,8 @@ for img in tqdm.tqdm(glob.glob(img_dir)):
     #depth_numpy = zoe.infer_pil(image)  # as numpy
 
     #depth_pil = zoe.infer_pil(image, output_type="pil")  # as 16-bit PIL Image
-    depth_tensor = zoe.infer_pil(image, output_type="tensor").cpu().detach().numpy()  # as torch tensor
+    # https://github.com/isl-org/ZoeDepth/issues/10
+    depth_tensor = zoe.infer_pil(image, output_type="tensor", pad_input=False).cpu().detach().numpy()  # as torch tensor
 
     
     #print(depth_tensor.shape)
