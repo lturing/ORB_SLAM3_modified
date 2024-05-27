@@ -133,7 +133,12 @@ source devel/setup.bash #激活allan_variance_ros的环境
 cd /data/path/to/imu_data 
 
 # 进行参数评估，结果保存在/data/path/to/imu_data/allan_variance_ros
-rosrun allan_variance_ros allan_variance /data/path/to/imu_data/kalibr.bag /data/path/to/imu_data/allan_variance_ros
+# 首先在一个窗口内，执行          
+roscore       
+在另一个窗口内执行              
+rosrun allan_variance_ros allan_variance /data/path/to/imu_data/kalibr.bag /data/path/to/imu_data_config_file
+例如
+rosrun allan_variance_ros allan_variance /data/ros2_ws/imu_calib/rosbag2_2024_05_24-16_47_23 /data/code/ros1_ws/src/allan_variance_ros/config/orbbec.yaml 
 
 # 生成imu.yaml，NoiseGyro、GyroWalk、NoiseAcc、AccWalk(连续)
 rosrun allan_variance_ros analysis.py --data /data/path/to/imu_data/allan_variance_ros/allan_variance.csv
